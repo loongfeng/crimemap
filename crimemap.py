@@ -1,9 +1,9 @@
 from dbhelper import DBHelper
-from flask import flask
+from flask import Flask
 from flask import render_template
 from flask import request
 
-app=flask(__name__)
+app=Flask(__name__)
 DB=DBHelper()
 
 @app.route("/")
@@ -13,7 +13,7 @@ def home():
     except Exception as e:
         print e
         data=None
-    return render_tempate("home.html",data=data)
+    return render_template("home.html",data=data)
 
 @app.route("/add",methods=['POST'])
 def add():
