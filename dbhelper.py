@@ -34,5 +34,5 @@ class DBHelper:
             with connection.cursor() as cursor:
                 cursor.execute(query)
                 connection.commit
-            finally:
+        finally:
                 connection.close()
