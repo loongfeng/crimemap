@@ -6,35 +6,47 @@
     <script type="text/javascript"         src="https://maps.googleapis.com/maps/api/js">
     </script>
     <script type="text/javascript">
-        var map;
-        var marker;
-        function initialize() {
-            
-            var mapOptions={
-                center:new google.maps.LatLng(-33.30578381949298,26.523442268371582),
-                zoom:15
-            };
-            map=new google.maps.Map(document.getElementById("map-canvas"),mapOptions);
-            google.maps.event.addListener(map,'click',function(event){
-                placeMarker(event.latLng);
-            });
-        }
+         var map;
+    var marker;
+    var existing_crimes;
 
-            function placeMarker(location){
-                if (marker){
-                    marker.setPosition(location);
+    function initialize() { 
+      var mapOptions = {
+        center: new google.maps.LatLng(-33.30578381949298, 26.523442268371582),
+        zoom: 15
+      };
+      map = new google.maps.Map(document.getElementById("map-canvas"), mapOptions);
+      google.maps.event.addListener(map, 'click', function(event){   
+        placeMarker(event.latLng);
+      });
+      placeCrimes({{crimes | safe}});
+    }
 
-                }
-                else {
-                    marker=new google.maps.Marker({
-                        position:location,
-                    map:map
-                });
-            }
-            document.getElementById('latitude').value=location.lat();
-            document.getElementById('longtitude').value=location.lng();
-}
-    
+    function placeCrimes(crimes) {
+      for (i=0; i<crimes.length; i++) {
+        crime = new google.maps.Marker( {
+          position: new google.maps.LatLng(crimes[i].latitude, crimes[i].longitude),
+          map: map,
+          title: crimes[i].date + "\n" + 
+            crimes[i].category + "\n" + crimes[i].description
+          }
+        );
+      }
+    }
+
+    function placeMarker(location) {
+      if (marker) {
+        marker.setPosition(location);
+      } else {
+        marker = new google.maps.Marker({
+          position: location, 
+          map: map
+        });
+      }
+    document.getElementById('latitude').value = location.lat();
+    document.getElementById('longitude').value = location.lng();
+    }
+
     </script>
 </head>
 <body onload="initialize()">
@@ -54,8 +66,8 @@
             <input name="date" id="date" type="date">
             <label for="latitude">Latitude</label>
             <input type="text" name="latitude" id="latitude">
-            <label for="longtitude">Longtitude</label>
-            <input type="text" name="longtitude" id="longtitude">
+            <label for="longitude">Longitude</label>
+            <input type="text" name="longitude" id="longitude">
             <label for="description">Description</label>
             <textarea name="description" id="description" cols="30" rows="10" placeholder="A brief but detailded description of the crime"></textarea>
             <input type="submit" value="Submit">
